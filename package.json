@@ -1,0 +1,24 @@
+{
+  "name": "appyhour-api",
+  "version": "1.0.0",
+  "description": "A web app for Portland's happy hour scene",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thinkful-PDX-Dev/AppyHour-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thinkful-PDX-Dev/AppyHour-api/issues"
+  },
+  "homepage": "https://github.com/Thinkful-PDX-Dev/AppyHour-api#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  },
+  "devDependencies": {}
+}
