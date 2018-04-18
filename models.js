@@ -3,10 +3,12 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
+//Schema for bar data
+
 const barSchema = mongoose.Schema({
   name: {type: String, required: true},
-  address: {type: String, required: true}
-  hours: {type: String, required: true}
+  address: {type: String, required: true},
+  hours: {type: String, required: true},
   description: {type: String}
 })
 
@@ -17,7 +19,6 @@ barSchema.methods.serialize = function() {
     address: this.address,
     hours: this.hours,
     description: this.description
-
   }
 }
 
