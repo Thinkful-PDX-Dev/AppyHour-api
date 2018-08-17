@@ -11,10 +11,10 @@ run node seed-db.js to refresh database with what is in seed-data.json.
 
 ## Endpoints
 
-- **GET/bars**
-- **GET/bars/:id**
+### GET/bars
+### GET/bars/:id
 
-### Response
+- **Response**
 
 ``` 
 [
@@ -28,9 +28,9 @@ run node seed-db.js to refresh database with what is in seed-data.json.
     ...
 ```
 
-- **POST/bars**
+### POST/bars
 
-### Request
+- **Request**
 
 ```
 {
@@ -41,7 +41,7 @@ run node seed-db.js to refresh database with what is in seed-data.json.
 }
 ```
 
-### Response
+- **Response**
 
 ```
 {
@@ -53,11 +53,11 @@ run node seed-db.js to refresh database with what is in seed-data.json.
 }
 ```
 
-- **PUT/bars/:id**
+### PUT/bars/:id
 
 1 or all fields can be updated, example:
 
-### Request
+- **Request**
 
 ```
 {
@@ -66,7 +66,7 @@ run node seed-db.js to refresh database with what is in seed-data.json.
 }
 ```
 
-### Response
+- **Response**
 
 ```
 {
@@ -78,9 +78,9 @@ run node seed-db.js to refresh database with what is in seed-data.json.
 }
 ```
 
-- **DELETE/bars/:id**
+### DELETE/bars/:id
 
-### Response
+- **Response**
 
 ```
 204 No Content
