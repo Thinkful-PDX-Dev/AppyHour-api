@@ -1,19 +1,35 @@
 "use strict";
+require('dotenv').config();
 
-const { DATABASE_URL, PORT } = require("./config");
+
+const { DATABASE_URL, PORT, CLIENT_ORIGIN } = require("./config");
 const express = require("express");
+const cors = require('cors');
+
 const app = express();
+
 const mongoose = require("mongoose");
-const { Bar } = require("./models");
+const Bar = require("./models");
+const router = express.Router();
+
 mongoose.Promise = global.Promise;
+// CORS
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
+
 app.use(express.json());
 
 //get data for all bars
 app.get("/bars", (req, res) => {
   Bar.find()
-    .then(bars => {
+    .then(results => {
       //serialize each response
-      res.json(bars.map(bar => bar.serialize()));
+      res.json(results.map(bar => bar.serialize()));
+      // res.json(results);
+
     })
     .catch(err => {
       //error if request fails
@@ -37,7 +53,7 @@ app.get("/bars/:id", (req, res) => {
 //post bar data
 app.post("/bars", (req, res) => {
   //required fields for post
-  let requiredFields = ["name", "address", "hours"];
+  let requiredFields = ["name", "address", "hours", "description"];
   //check if each required field is present. If a field is not present, return an error message
   for (var i = 0; i < requiredFields.length; i++) {
     let field = requiredFields[i];
@@ -50,7 +66,7 @@ app.post("/bars", (req, res) => {
     name: req.body.name,
     address: req.body.address,
     hours: req.body.hours,
-    supply: req.body.supply
+    description: req.body.description
   })
     .then(newBar=> {
       res.status(201).json(newBar.serialize());
@@ -64,28 +80,34 @@ app.post("/bars", (req, res) => {
 //update bar data object
 app.put("/bars/:id", (req, res) => {
   //if ids don't match, return error
-  if (!(req.params.id === req.body.id)) {
-    return res.status(400).json({ error: "nah dog, ids don't match" });
-  }
-  let requiredFields = ["name", "address", "hours"];
-  //check if each required field is present. If a field is not present, return an error message
-  for (var i = 0; i < requiredFields.length; i++) {
-    let field = requiredFields[i];
-    if (!field) {
-      return res.status(400).json({ error: "missing field in request body" });
-    }
-  }
+  // if (!(req.params.id === req.body.id)) {
+  //   console.log(req.body.id); // undefined so rewriting this part
+    
+  //   return res.status(400).json({ error: "nah dog, ids don't match" });
+  // }
+  // let requiredFields = ["name", "address", "hours"];
+  // //check if each required field is present. If a field is not present, return an error message
+  // for (var i = 0; i < requiredFields.length; i++) {
+  //   let field = requiredFields[i];
+  //   if (!field) {
+  //     return res.status(400).json({ error: "missing field in request body" });
+  //   }
+  // }
 
-  const updatedBar = {
-    name: req.body.name,
-    address: req.body.address,
-    hours: req.body.hours,
-    supply: req.body.supply
-  };
+  const { id } = req.params;
 
-  Bar.findByIdAndUpdate(req.body.id, updatedBar, { new: true })
-    .then(updatedBar => {
-      res.status(201).json(updatedBar);
+  let { name, address, hours, description } = req.body;
+
+  const updateBar = {};
+
+  if(name) updateBar.name = name;
+  if(address) updateBar.address = address;
+  if(hours) updateBar.hours = hours; 
+  if(description) updateBar.description = description; 
+
+  Bar.findByIdAndUpdate({_id: id}, updateBar, { new: true })
+    .then(result => {
+      res.status(201).json(result);
     })
     .catch(err => {
       console.error(err);
