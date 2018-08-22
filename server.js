@@ -7,6 +7,9 @@ const { DATABASE_URL, PORT, CLIENT_ORIGIN } = require("./config");
 
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+
 const mongoose = require("mongoose");
 const router = express.Router();
 
@@ -14,6 +17,8 @@ mongoose.Promise = global.Promise;
 
 //ROUTES
 const barsRouter = require('./routes/bars');
+
+
 
 // CORS
 app.use(
