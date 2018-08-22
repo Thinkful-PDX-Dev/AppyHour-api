@@ -64,23 +64,31 @@ router.post('/bars', (req, res) => {
 });
 
 //update bar data object
-router.put('/bars/:id', (req, res) => {
+router.put('/bars/:id', async (req, res) => {
   const { id } = req.params;
   const { name, location, hours, description } = req.body;
-  let locationToUpdate;
-  const updateBar = {};
-
-  if(name) updateBar.name = name;
-
-  if(location){
-    updateBar.location = location;
-  }
-  console.log(updateBar);
   
-  if(hours) updateBar.hours = hours; 
-  if(description) updateBar.description = description; 
+  const existingBar = await Bar.findById({_id: id});
+  for (let field in existingBar) { // remove null fields from existing Doc
+	  if (existingBar[field] === null) delete existingBar[field];
+  }
+  for (let field in existingBar.location) { // remove null fields from existing Location
+	  if (existingBar.location[field] === null) delete existingBar.location[field];
+  }
+  const updateQuery = {...req.body}; // define the update query for mongoose
+  if (location) updateQuery.location = { ...existingBar.location, ...location };
 
-  Bar.findByIdAndUpdate({_id: id}, { $set: updateBar}, { new: true })
+//   if(name) updateBar.name = name;
+
+//   if(location){
+//     updateBar.location = location;
+//   }
+//   console.log(updateBar);
+  
+//   if(hours) updateBar.hours = hours; 
+//   if(description) updateBar.description = description; 
+
+  Bar.findByIdAndUpdate({_id: id}, { $set: updateQuery }, { new: true })
     .then(result => {
       res.status(201).json(result);
     })

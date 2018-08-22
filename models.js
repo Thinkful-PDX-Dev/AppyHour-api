@@ -13,7 +13,9 @@ const barSchema = mongoose.Schema({
     state: {type: String, required: true},
     zip: Number,
     patio: Boolean,
-    neighborhood: String
+	neighborhood: String,
+	province: String,
+    country: String
   },
   hours: {type: String, required: true},
   description: {type: String}
