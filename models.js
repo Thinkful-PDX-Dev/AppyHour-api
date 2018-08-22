@@ -7,7 +7,14 @@ mongoose.Promise = global.Promise;
 
 const barSchema = mongoose.Schema({
   name: {type: String, required: true},
-  address: {type: String, required: true},
+  location: {
+    address: {type: String, required: true},
+    city: {type: String, required: true},
+    state: {type: String, required: true},
+    zip: Number,
+    patio: Boolean,
+    neighborhood: String
+  },
   hours: {type: String, required: true},
   description: {type: String}
 })
@@ -24,7 +31,7 @@ barSchema.methods.serialize = function() {
   return {
     id: this._id,
     name: this.name,
-    address: this.address,
+    location: this.location,
     hours: this.hours,
     description: this.description
   }

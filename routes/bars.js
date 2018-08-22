@@ -32,14 +32,14 @@ router.get('/bars/:id', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'ughhhhhhhh no no' });
+      res.status(500).json({ error: err.message });
     });
 });
 
 //post bar data
 router.post('/bars', (req, res) => {
   //required fields for post
-  let requiredFields = ['name', 'address', 'hours', 'description'];
+  let requiredFields = ['name','location','hours','description'];
   //check if each required field is present. If a field is not present, return an error message
   for (var i = 0; i < requiredFields.length; i++) {
     let field = requiredFields[i];
@@ -50,7 +50,7 @@ router.post('/bars', (req, res) => {
   //create new data object
   Bar.create({
     name: req.body.name,
-    address: req.body.address,
+    location: req.body.location,
     hours: req.body.hours,
     description: req.body.description
   })
@@ -59,29 +59,34 @@ router.post('/bars', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'ughhhhhhhh no no' });
+      res.status(500).json({ error: err.message });
     });
 });
 
 //update bar data object
 router.put('/bars/:id', (req, res) => {
   const { id } = req.params;
-  let { name, address, hours, description } = req.body;
-  
+  const { name, location, hours, description } = req.body;
+  let locationToUpdate;
   const updateBar = {};
 
   if(name) updateBar.name = name;
-  if(address) updateBar.address = address;
+
+  if(location){
+    updateBar.location = location;
+  }
+  console.log(updateBar);
+  
   if(hours) updateBar.hours = hours; 
   if(description) updateBar.description = description; 
 
-  Bar.findByIdAndUpdate({_id: id}, updateBar, { new: true })
+  Bar.findByIdAndUpdate({_id: id}, { $set: updateBar}, { new: true })
     .then(result => {
       res.status(201).json(result);
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'ughhhhhhhh no no' });
+      res.status(500).json({ error: err.message });
     });
 });
 
@@ -93,7 +98,7 @@ router.delete('/bars/:id', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'ughhhhhhhh no no' });
+      res.status(500).json({ error: err.message });
     });
 });
 
