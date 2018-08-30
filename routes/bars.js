@@ -39,7 +39,7 @@ router.get('/bars/:id', (req, res) => {
 //post bar data
 router.post('/bars', (req, res) => {
   //required fields for post
-  let requiredFields = ['name', 'address', 'hours', 'description'];
+  let requiredFields = ['name', 'address', 'hours'];
   //check if each required field is present. If a field is not present, return an error message
   for (var i = 0; i < requiredFields.length; i++) {
     let field = requiredFields[i];
@@ -52,7 +52,14 @@ router.post('/bars', (req, res) => {
     name: req.body.name,
     address: req.body.address,
     hours: req.body.hours,
-    description: req.body.description
+    description: req.body.description,
+    neighborhood: req.body.neighborhood,
+    phone: req.body.phone,
+    rating: req.body.rating,
+    review: req.body.review,
+    link: req.body.link,
+    img: req.body.img,
+    patio: req.body.patio,
   })
     .then(newBar=> {
       res.status(201).json(newBar.serialize());
@@ -66,14 +73,36 @@ router.post('/bars', (req, res) => {
 //update bar data object
 router.put('/bars/:id', (req, res) => {
   const { id } = req.params;
-  let { name, address, hours, description } = req.body;
+  let { 
+    name, 
+    address, 
+    hours, 
+    description,
+    neighborhood,
+    phone,
+    rating,
+    review,
+    price,
+    link,
+    img,
+    patio   
+  } = req.body;
   
   const updateBar = {};
 
   if(name) updateBar.name = name;
   if(address) updateBar.address = address;
   if(hours) updateBar.hours = hours; 
-  if(description) updateBar.description = description; 
+  if(description) updateBar.description = description;
+  if(neighborhood) updateBar.neighborhood = neighborhood;
+  if(phone) updateBar.phone = phone;
+  if(rating) updateBar.rating = rating;
+  if(review) updateBar.review = review;
+  if(price) updateBar.price = price;
+  if(link) updateBar.link = link;
+  if(img) updateBar.img = img;
+  if(patio) updateBar.patio = patio;
+
 
   Bar.findByIdAndUpdate({_id: id}, updateBar, { new: true })
     .then(result => {
